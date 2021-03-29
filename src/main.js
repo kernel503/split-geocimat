@@ -1,11 +1,18 @@
 import Vue from 'vue';
 import vuetify from './plugins/vuetify';
-import HelloWorld from './components/HelloWorld';
+
 import Formulario from './components/proyecto/Formulario';
+import Calendario from './components/Calendario.vue';
+import EstadoVisita from './components/EstadoVisita.vue';
+import Categoria from './components/Categoria.vue';
+import Clasificacion from './components/Clasificacion.vue';
 Vue.config.productionTip = false;
 
-Vue.component('hello-world', HelloWorld);
 Vue.component('formulario-proyecto', Formulario);
+Vue.component('calendario', Calendario);
+Vue.component('estados-visita', EstadoVisita);
+Vue.component('categoria', Categoria);
+Vue.component('clasificacion', Clasificacion);
 
 new Vue({
   el: '#app',

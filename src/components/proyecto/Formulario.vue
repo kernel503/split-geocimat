@@ -297,14 +297,7 @@ export default {
 
     setPinOnMap (latitude, longitude) {
       this.map.entities.clear()
-      const pin = new Microsoft.Maps.Pushpin(
-        { latitude, longitude },
-        {
-          color: 'red',
-          icon:
-            'https://bingmapsisdk.blob.core.windows.net/isdksamples/defaultPushpin.png'
-        }
-      )
+      const pin = new Microsoft.Maps.Pushpin({ latitude, longitude })
       this.map.entities.push(pin)
     }
   }
