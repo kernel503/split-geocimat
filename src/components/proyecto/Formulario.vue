@@ -65,9 +65,9 @@
             </v-col>
             <v-col cols="12" sm="6">
               <v-select
-                v-model="form.clasification"
+                v-model="form.area"
                 :rules="rules.requiredSelectField"
-                :items="clasifications"
+                :items="area"
                 item-text="nombre"
                 item-value="id"
                 label="Unidad"
@@ -146,9 +146,11 @@
 </template>
 
 <script>
+// https://stackoverflow.com/questions/55966573/parse-json-encoded-data-in-vue-component
 const defaultForm = Object.freeze({
   projectName: '',
   clasification: '',
+  area: '',
   longitude: '',
   latitude: '',
   description: '',
@@ -157,6 +159,10 @@ const defaultForm = Object.freeze({
 
 export default {
   name: 'Formulario',
+
+  props: {
+    data: { type: String, required: true }
+  },
 
   data () {
     return {
@@ -211,6 +217,10 @@ export default {
   },
 
   mounted () {
+    console.log(this.data)
+    const data = JSON.parse(this.data)
+    this.clasifications = data.clasificaciones
+    this.area = data.clasificaciones
     setTimeout(() => {
       const navigationBarMode = Microsoft.Maps.NavigationBarMode
       const map = new Microsoft.Maps.Map('#myMap', {
@@ -254,7 +264,7 @@ export default {
         })
     },
 
-    async submitForm () {
+    submitForm () {
       this.validForm = this.$refs.form.validate()
       if (!this.validForm) {
         this.snackbar = {
@@ -282,6 +292,25 @@ export default {
           }
           console.log(err)
         })
+    },
+
+    getFormData () {
+      const {
+        projectName: nombre,
+        clasification: id_clasificacion,
+        longitude: longitud,
+        latitude: latitud,
+        description: descripcion
+      } = this.form
+
+      const formData = {
+        nombre,
+        id_clasificacion,
+        longitud,
+        latitud,
+        descripcion
+      }
+      return formData
     },
 
     cleanForm () {
