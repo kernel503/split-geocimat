@@ -2,6 +2,7 @@ import Vue from 'vue';
 import vuetify from './plugins/vuetify';
 
 import Formulario from './components/proyecto/Formulario';
+import Repositorio from './components/proyecto/Repositorio.vue';
 import Calendario from './components/Calendario.vue';
 import EstadoVisita from './components/EstadoVisita.vue';
 import Categoria from './components/Categoria.vue';
@@ -9,6 +10,7 @@ import Clasificacion from './components/Clasificacion.vue';
 Vue.config.productionTip = false;
 
 Vue.component('formulario-proyecto', Formulario);
+Vue.component('repositorio', Repositorio);
 Vue.component('calendario', Calendario);
 Vue.component('estados-visita', EstadoVisita);
 Vue.component('categoria', Categoria);
