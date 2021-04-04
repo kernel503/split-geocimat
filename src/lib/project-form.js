@@ -5,7 +5,7 @@ function getClassification() {
     axios
       .get(`${baseURL}/geocimat/clasificacion`)
       .then((response) => {
-        resolve(response.data.clasificaciones);
+        resolve(response.data);
       })
       .catch((error) => {
         reject(error);

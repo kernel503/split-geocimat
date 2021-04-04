@@ -1,3 +1,10 @@
+window.axios = require('axios');
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+axios.defaults.headers.common['X-CSRF-TOKEN'] =
+  document.querySelector('[name="_token"]')?.value || 'OIUsdDDSwreewjklqqffds_FEWJF';
+axios.defaults.baseURL = 'http://127.0.0.1:8000/geocimat';
+// axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 import Vue from 'vue';
 import vuetify from './plugins/vuetify';
 
@@ -7,6 +14,8 @@ import Calendario from './components/Calendario.vue';
 import EstadoVisita from './components/EstadoVisita.vue';
 import Categoria from './components/Categoria.vue';
 import Clasificacion from './components/Clasificacion.vue';
+import axios from 'axios';
+
 Vue.config.productionTip = false;
 
 Vue.component('formulario-proyecto', Formulario);

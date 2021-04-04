@@ -25,7 +25,7 @@
             <v-col cols="12" sm="6">
               <v-menu
                 v-model="showCalendar"
-                :close-on-content-click="true"
+                :close-on-content-click="false"
                 :nudge-right="40"
                 transition="scale-transition"
                 offset-y
@@ -36,16 +36,16 @@
                     v-model="form.date"
                     label="Fecha de inicio"
                     append-icon="mdi-calendar"
-                    readonly
                     v-bind="attrs"
                     v-on="on"
+                    readonly
                     outlined
                   ></v-text-field>
                 </template>
                 <v-date-picker
                   v-model="form.date"
-                  @input="showCalendar = false"
                   locale="es-419"
+                  @input="showCalendar = false"
                 ></v-date-picker>
               </v-menu>
             </v-col>
@@ -67,7 +67,7 @@
               <v-select
                 v-model="form.area"
                 :rules="rules.requiredSelectField"
-                :items="area"
+                :items="unidades"
                 item-text="nombre"
                 item-value="id"
                 label="Unidad"
@@ -160,26 +160,21 @@ const defaultForm = Object.freeze({
 export default {
   name: 'Formulario',
 
-  props: {
-    data: { type: String, required: true }
-  },
-
   data () {
     return {
+      validForm: false,
       showCalendar: false,
+      form: { ...defaultForm },
       map: null,
+
       clasifications: [],
-      area: [],
+      unidades: [],
 
       snackbar: {
         visible: false,
         text: '',
         color: ''
       },
-
-      validForm: false,
-
-      form: { ...defaultForm },
 
       rules: {
         requiredInputField: [
@@ -217,10 +212,7 @@ export default {
   },
 
   mounted () {
-    console.log(this.data)
-    const data = JSON.parse(this.data)
-    this.clasifications = data.clasificaciones
-    this.area = data.clasificaciones
+    this.setListField()
     setTimeout(() => {
       const navigationBarMode = Microsoft.Maps.NavigationBarMode
       const map = new Microsoft.Maps.Map('#myMap', {
@@ -240,6 +232,7 @@ export default {
       })
       this.map = map
       Microsoft.Maps.Events.addHandler(map, 'click', event => {
+        console.log(event)
         map.entities.clear()
         const {
           location: { latitude, longitude }
@@ -248,49 +241,47 @@ export default {
         this.form.longitude = longitude.toFixed(6)
         this.setPinOnMap(this.form.latitude, this.form.longitude)
       })
-    }, 1500)
+    }, 2000)
   },
 
   methods: {
     setListField () {
-      getClassification()
-        .then(result => {
-          this.clasifications = result
-          this.clasifications = result
+      axios
+        .get('clasificacion')
+        .then(response => {
+          const {
+            data: { clasificaciones, areas }
+          } = response
+          this.clasifications = clasificaciones
+          this.unidades = clasificaciones
         })
-        .catch(err => {
-          console.log(err)
-          this.clasifications = []
+        .catch(error => {
+          console.log(error)
+          const message =
+            error.response.status + ' Error en al cargar los datos. '
+          this.errorNotification(message)
         })
     },
 
     submitForm () {
       this.validForm = this.$refs.form.validate()
       if (!this.validForm) {
-        this.snackbar = {
-          visible: true,
-          text: 'Debe completar el formulario.',
-          color: 'red'
-        }
-        return
+        return this.errorNotification('Debe completar el formulario.')
       }
 
-      createProject(this.getFormData())
-        .then(mensaje => {
-          this.snackbar = {
-            visible: true,
-            text: mensaje,
-            color: 'indigo'
+      axios
+        .post('proyecto/crear', this.getFormData())
+        .then(response => {
+          if (response.status === 201) {
+            this.successNotificacion(response.data.mensaje)
+            this.cleanForm()
           }
-          this.cleanForm()
         })
-        .catch(err => {
-          this.snackbar = {
-            visible: true,
-            text: 'Error inesperado.',
-            color: 'red'
-          }
-          console.log(err)
+        .catch(error => {
+          console.log(error)
+          const message =
+            error.response.status + ' Error en al cargar los datos. '
+          this.errorNotification(message)
         })
     },
 
@@ -300,17 +291,36 @@ export default {
         clasification: id_clasificacion,
         longitude: longitud,
         latitude: latitud,
-        description: descripcion
+        description: descripcion,
+        date: fecha_creado,
+        area: id_unidad
       } = this.form
 
-      const formData = {
+      return {
         nombre,
         id_clasificacion,
         longitud,
         latitud,
-        descripcion
+        descripcion,
+        fecha_creado,
+        id_unidad
       }
-      return formData
+    },
+
+    successNotificacion (message) {
+      this.snackbar = {
+        visible: true,
+        text: message,
+        color: 'indigo'
+      }
+    },
+
+    errorNotification (message) {
+      return (this.snackbar = {
+        visible: true,
+        text: message,
+        color: 'red'
+      })
     },
 
     cleanForm () {
