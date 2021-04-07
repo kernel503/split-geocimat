@@ -79,7 +79,7 @@
           <v-row>
             <v-col cols="12" sm="6">
               <v-text-field
-                v-model="form.longitude"
+                v-model="form.longitude"8080
                 :rules="rules.numberLongitudeField"
                 label="Longitud"
                 append-icon="mdi-map-marker"
