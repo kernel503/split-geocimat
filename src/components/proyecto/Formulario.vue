@@ -101,7 +101,7 @@
           </v-row>
 
           <v-row class="d-flex" justify="center">
-            <div id="myMap" :style="{ width: '100vw', height: '100vh' }"></div>
+            <div id="myMap" :style="{ width: '85vw', height: '100vh' }"></div>
           </v-row>
 
           <v-row class="mt-2">
@@ -241,7 +241,7 @@ export default {
         this.form.longitude = longitude.toFixed(6)
         this.setPinOnMap(this.form.latitude, this.form.longitude)
       })
-    }, 2000)
+    }, 1500)
   },
 
   methods: {
@@ -258,7 +258,7 @@ export default {
         .catch(error => {
           console.log(error)
           const message =
-            error.response.status + ' Error en al cargar los datos. '
+            error.response.status + ' Error en al cargar los datos.'
           this.errorNotification(message)
         })
     },
@@ -275,12 +275,17 @@ export default {
           if (response.status === 201) {
             this.successNotificacion(response.data.mensaje)
             this.cleanForm()
+            return
           }
+          const message = error.response.status + ' Error al crear el registro.'
+          this.errorNotification(message)
         })
         .catch(error => {
           console.log(error)
-          const message =
-            error.response.status + ' Error en al cargar los datos. '
+          if (error.response.status === 422) {
+            return this.errorNotification(error.response.data.error)
+          }
+          const message = error.response.status + ' Error al crear el registro.'
           this.errorNotification(message)
         })
     },
@@ -289,21 +294,21 @@ export default {
       const {
         projectName: nombre,
         clasification: id_clasificacion,
+        area: id_unidad,
         longitude: longitud,
         latitude: latitud,
-        description: descripcion,
         date: fecha_creado,
-        area: id_unidad
+        description: descripcion
       } = this.form
 
       return {
         nombre,
         id_clasificacion,
+        id_unidad,
+        fecha_creado,
         longitud,
         latitud,
-        descripcion,
-        fecha_creado,
-        id_unidad
+        descripcion
       }
     },
 

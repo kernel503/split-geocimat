@@ -6,7 +6,7 @@
           <v-row class="my-5 mx-1">
             <v-chip color="secondary" label text-color="white">
               <h3>
-                {{ id }}
+                {{ idProyecto }}
               </h3>
               <v-icon right> mdi-text-box-plus </v-icon>
             </v-chip>
@@ -26,7 +26,7 @@
                 v-bind:setGalery="setGalery"
                 v-bind:displayComponent="displayComponent"
                 v-bind:setProjectInfo="setProjectInfo"
-                v-bind:id="id"
+                v-bind:id="idProyecto"
               />
             </v-tab-item>
 
@@ -127,8 +127,6 @@ import VistaArbol from './VistaArbol.vue'
 export default {
   name: 'Repositorio',
 
-  props: { id: String },
-
   components: {
     VistaArbol
   },
@@ -143,7 +141,7 @@ export default {
 
       showComponent: true,
 
-      idProject: '',
+      idProyecto: '',
       tab: 0,
       sizeCols: 2,
       galeryList: [],
@@ -171,7 +169,10 @@ export default {
     }
   },
 
-  created () {},
+  created () {
+    this.idProyecto =
+      decodeURI(window.location.pathname.split('/').slice(-1)) || 'error'
+  },
 
   methods: {
     displayComponent (value) {

@@ -1,11 +1,5 @@
-window.axios = require('axios');
-axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-axios.defaults.headers.common['X-CSRF-TOKEN'] =
-  document.querySelector('[name="_token"]')?.value || 'OIUsdDDSwreewjklqqffds_FEWJF';
-axios.defaults.baseURL = 'http://127.0.0.1:8000/geocimat';
-// axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
-// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 import Vue from 'vue';
+import axios from 'axios';
 import vuetify from './plugins/vuetify';
 
 import Formulario from './components/proyecto/Formulario';
@@ -14,7 +8,12 @@ import Calendario from './components/Calendario.vue';
 import EstadoVisita from './components/EstadoVisita.vue';
 import Categoria from './components/Categoria.vue';
 import Clasificacion from './components/Clasificacion.vue';
-import axios from 'axios';
+
+window.axios = require('axios');
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+axios.defaults.headers.common['X-CSRF-TOKEN'] =
+  document.querySelector('input[name="_token"]')?.value || 'INVALID_CSRF_TOKEN';
+axios.defaults.baseURL = window.location.origin + '/geocimat' || 'http://127.0.0.1:8000/geocimat';
 
 Vue.config.productionTip = false;
 

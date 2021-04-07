@@ -113,13 +113,6 @@
 </template>
 
 <script>
-import {
-  getDirectory,
-  createFolder,
-  deleteElement,
-  uploadElement
-} from '@/lib/tree-view'
-
 export default {
   name: 'VistaArbol',
 
@@ -174,16 +167,22 @@ export default {
 
   methods: {
     setItems () {
-      getDirectory(this.id_proyecto)
-        .then(result => {
-          this.items = result.directorio
-          this.setGalery(result.galeria)
-          this.setProjectInfo(result.datos)
+      axios
+        .get('repositorio/mostrar/' + this.id_proyecto)
+        .then(response => {
+          this.items = response.data.directorio
+          this.setGalery(response.data.galeria)
+          this.setProjectInfo(response.data.datos)
           this.displayComponent(true)
         })
         .catch(error => {
+          console.log(error)
           this.items = []
-          this.showAlert({ show: true, text: error, color: 'red' })
+          this.showAlert({
+            show: true,
+            text: error.response.data.mensaje,
+            color: 'red'
+          })
           this.displayComponent(false)
         })
         .then(_ => {
@@ -191,44 +190,83 @@ export default {
         })
     },
 
+    createFolder () {
+      if (this.folderName.trim()) {
+        axios
+          .post('repositorio/crear', {
+            nodoPadre: this.id_proyecto,
+            folder: this.folderName
+          })
+          .then(response => {
+            this.setItems()
+            this.showAlert({
+              show: true,
+              text: response.data.mensaje,
+              color: 'indigo'
+            })
+            this.folderName = ''
+            this.dialog = false
+          })
+          .catch(error => {
+            this.showAlert({
+              show: true,
+              text: error.response.data.mensaje,
+              color: 'error'
+            })
+          })
+      }
+    },
+
     removeItem () {
       this.uploading = true
-      deleteElement({
-        data: {
-          nodo: this.id_proyecto,
-          elemento: this.tree
-        }
-      })
-        .then(result => {
+      axios
+        .delete('repositorio/destruir', {
+          data: {
+            nodo: this.id_proyecto,
+            elemento: this.tree
+          }
+        })
+        .then(response => {
           this.setItems()
-          this.showAlert({ show: true, text: result, color: 'indigo' })
+          this.showAlert({
+            show: true,
+            text: response.data.mensaje,
+            color: 'indigo'
+          })
           this.tree = []
         })
         .catch(error => {
-          this.showAlert({ show: true, text: error, color: 'error' })
+          this.showAlert({
+            show: true,
+            text: error.response.data.mensaje,
+            color: 'error'
+          })
         })
-    },
-
-    downloadItem ({ url }) {
-      window.open(url, '_blank')
-      this.tree = []
-    },
-
-    uploadItemClick ({ ruta }) {
-      this.$refs.image.$refs.input.click()
-      this.path = ruta
     },
 
     upload () {
       if (this.filesUpload && this.path) {
         this.uploading = true
         const formData = this.createFormData()
-        uploadElement(formData)
-          .then(result => {
-            this.showAlert({ show: true, text: result, color: 'indigo' })
+        axios
+          .post('repositorio/almacenar', formData, {
+            headers: {
+              'content-type': 'multipart/form-data'
+            }
+          })
+          .then(response => {
+            this.showAlert({
+              show: true,
+              text: response.data.mensaje,
+              color: 'indigo'
+            })
           })
           .catch(error => {
-            this.showAlert({ show: true, text: error, color: 'error' })
+            this.showAlert({
+              show: true,
+              text: error.response.data.mensaje,
+              color: 'error'
+            })
           })
           .then(() => {
             this.setItems()
@@ -249,22 +287,14 @@ export default {
       return formData
     },
 
-    createFolder () {
-      if (this.folderName.trim()) {
-        createFolder({
-          nodoPadre: this.id_proyecto,
-          folder: this.folderName
-        })
-          .then(result => {
-            this.setItems()
-            this.showAlert({ show: true, text: result, color: 'indigo' })
-            this.folderName = ''
-            this.dialog = false
-          })
-          .catch(error => {
-            this.showAlert({ show: true, text: error, color: 'error' })
-          })
-      }
+    downloadItem ({ url }) {
+      window.open(url, '_blank')
+      this.tree = []
+    },
+
+    uploadItemClick ({ ruta }) {
+      this.$refs.image.$refs.input.click()
+      this.path = ruta
     }
   }
 }
