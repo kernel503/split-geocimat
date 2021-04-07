@@ -250,10 +250,10 @@ export default {
         .get('clasificacion')
         .then(response => {
           const {
-            data: { clasificaciones, areas }
+            data: { clasificaciones, unidades }
           } = response
           this.clasifications = clasificaciones
-          this.unidades = clasificaciones
+          this.unidades = unidades
         })
         .catch(error => {
           console.log(error)
