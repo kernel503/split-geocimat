@@ -1,6 +1,6 @@
 <template>
   <v-app>
-        <v-container>
+    <v-container>
       <v-container fluid>
         <div v-show="showComponent">
           <v-row class="my-5 mx-1">
