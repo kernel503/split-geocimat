@@ -18,7 +18,7 @@ axios.defaults.baseURL = window.location.origin + '/geocimat' || 'http://127.0.0
 Vue.config.productionTip = false;
 
 Vue.component('formulario-proyecto', Formulario);
-Vue.component('repositorio', Repositorio);
+Vue.component('repositorio-detalle', Repositorio);
 Vue.component('calendario', Calendario);
 Vue.component('estados-visita', EstadoVisita);
 Vue.component('categoria', Categoria);

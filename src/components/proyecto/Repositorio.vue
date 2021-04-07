@@ -1,7 +1,5 @@
 <template>
   <v-app>
-    <v-container>
-      <div>
         <div v-show="showComponent">
           <v-row class="my-5 mx-1">
             <v-chip color="secondary" label text-color="white">
@@ -116,8 +114,6 @@
           </v-snackbar>
         </div>
         <div v-show="!showComponent">Este proyecto no existe.</div>
-      </div>
-    </v-container>
   </v-app>
 </template>
 
