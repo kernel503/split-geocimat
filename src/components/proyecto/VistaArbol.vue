@@ -1,11 +1,10 @@
 <template>
-  <div id="inspire" class="mx-2">
-    <v-row class="mt-2">
+  <v-container>
+    <v-row>
       <v-col col="6" lg="6" v-show="false">
         <v-file-input
           v-model="filesUpload"
           ref="image"
-          class="mt-2"
           clearable
           counter
           multiple
@@ -24,92 +23,98 @@
       </v-col>
     </v-row>
 
-    <v-dialog v-model="dialog" width="500" v-if="!uploading">
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          color="indigo"
-          dark
-          v-bind="attrs"
-          v-on="on"
-          class="my-5 col-4 col-lg-2 col-md-2 col-sm-4"
-        >
-          Crear Carpeta
-        </v-btn>
-      </template>
-
-      <v-card>
-        <v-card-title class="headline grey lighten-2">
-          Nueva Carpeta
-        </v-card-title>
-
-        <v-card-text>
-          <v-row>
-            <v-col cols="12" sm="12" md="12" class="mt-3">
-              <v-text-field
-                label="Nombre de la carpeta"
-                v-model="folderName"
-                @keypress.enter="createFolder"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-        </v-card-text>
-
-        <v-divider></v-divider>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="grey" text @click="dialog = false"> Cancelar </v-btn>
+    <v-row class="mt-2">
+      <v-dialog v-model="dialog" width="500" v-if="!uploading">
+        <template v-slot:activator="{ on, attrs }">
           <v-btn
-            color="primary"
-            text
-            @click="createFolder"
-            :disabled="!folderName"
+            color="indigo"
+            dark
+            v-bind="attrs"
+            v-on="on"
+            class="my-5 col-4 col-lg-2 col-md-2 col-sm-4"
           >
-            Aceptar
+            Crear Carpeta
           </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+        </template>
 
-    <template v-if="tree.length">
-      <v-scroll-x-transition>
-        <v-slide-x-transition>
-          <v-btn color="red" dark class="my-5 ml-2" @click="removeItem">
-            <v-icon> mdi-delete </v-icon>
-          </v-btn>
-        </v-slide-x-transition>
-      </v-scroll-x-transition>
-    </template>
+        <v-card>
+          <v-card-title class="headline grey lighten-2">
+            Nueva Carpeta
+          </v-card-title>
 
-    <v-treeview
-      selectable
-      selected-color="indigo"
-      v-model="tree"
-      :open="initiallyOpen"
-      :items="items"
-      item-key="ruta"
-      activatable
-      v-if="!uploading"
-    >
-      <template v-slot:prepend="{ item, open }">
-        <v-icon v-if="item.mime === 'folder'">
-          {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
-        </v-icon>
-        <v-icon v-else>
-          {{ files[item.mime] || 'mdi-file' }}
-        </v-icon>
+          <v-card-text>
+            <v-row>
+              <v-col cols="12" sm="12" md="12" class="mt-3">
+                <v-text-field
+                  label="Nombre de la carpeta"
+                  v-model="folderName"
+                  @keypress.enter="createFolder"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-card-text>
+
+          <v-divider></v-divider>
+
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="grey" text @click="dialog = false"> Cancelar </v-btn>
+            <v-btn
+              color="primary"
+              text
+              @click="createFolder"
+              :disabled="!folderName"
+            >
+              Aceptar
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <template v-if="tree.length">
+        <v-scroll-x-transition>
+          <v-slide-x-transition>
+            <v-btn color="red" dark class="my-5 ml-2" @click="removeItem">
+              <v-icon> mdi-delete </v-icon>
+            </v-btn>
+          </v-slide-x-transition>
+        </v-scroll-x-transition>
       </template>
+    </v-row>
+    <v-row class="mt-0">
+      <v-col>
+        <v-treeview
+          selectable
+          selected-color="indigo"
+          v-model="tree"
+          :open="initiallyOpen"
+          :items="items"
+          item-key="ruta"
+          v-if="!uploading"
+        >
+          <template v-slot:prepend="{ item, open }">
+            <v-icon v-if="item.mime === 'folder'">
+              {{ open ? 'mdi-folder-open' : 'mdi-folder' }}
+            </v-icon>
+            <v-icon v-else>
+              {{ files[item.mime] || 'mdi-file' }}
+            </v-icon>
+          </template>
 
-      <template v-slot:append="{ item }">
-        <v-icon @click="uploadItemClick(item)" v-if="item.mime === 'folder'">
-          mdi-upload
-        </v-icon>
-        <v-icon @click="downloadItem(item)" v-else color="indigo">
-          mdi-download
-        </v-icon>
-      </template>
-    </v-treeview>
-  </div>
+          <template v-slot:append="{ item }">
+            <v-icon
+              @click="uploadItemClick(item)"
+              v-if="item.mime === 'folder'"
+            >
+              mdi-upload
+            </v-icon>
+            <v-icon @click="downloadItem(item)" v-else color="indigo">
+              mdi-download
+            </v-icon>
+          </template>
+        </v-treeview>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>

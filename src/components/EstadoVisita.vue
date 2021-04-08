@@ -193,12 +193,12 @@
 
 <script>
 import MaterialColorPicker from '@/components/MaterialColorPicker'
-// import {
-//   index,
-//   storeVisitingState,
-//   updateVisitingState,
-//   destroyVisitingState
-// } from '@/lib/admin-visitingstate'
+import {
+  index,
+  storeVisitingState,
+  updateVisitingState,
+  destroyVisitingState
+} from '@/lib/estadovisita'
 
 export default {
   name: 'EstadoVisita',

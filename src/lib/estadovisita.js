@@ -1,11 +1,9 @@
-import { baseURL, axios, config } from "./base";
-
 function index() {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${baseURL}/geocimat/clasificacion`)
+      .get('estadovisita')
       .then((response) => {
-        resolve(response.data.clasificaciones);
+        resolve(response.data.estadovisita);
       })
       .catch((error) => {
         reject(error);
@@ -13,10 +11,10 @@ function index() {
   });
 }
 
-function storeClassification(formData) {
+function storeVisitingState(formData) {
   return new Promise((resolve, reject) => {
     axios
-      .post(`${baseURL}/geocimat/clasificacion/crear`, formData, config)
+      .post('estadovisita/crear', formData)
       .then((response) => {
         resolve(response.data);
       })
@@ -26,10 +24,10 @@ function storeClassification(formData) {
   });
 }
 
-function updateClassification(formData) {
+function updateVisitingState(formData) {
   return new Promise((resolve, reject) => {
     axios
-      .post(`${baseURL}/geocimat/clasificacion/modificar`, formData, config)
+      .post('estadovisita/modificar', formData)
       .then((response) => {
         resolve(response.data);
       })
@@ -39,10 +37,10 @@ function updateClassification(formData) {
   });
 }
 
-function destroyClassification(formData) {
+function destroyVisitingState(formData) {
   return new Promise((resolve, reject) => {
     axios
-      .post(`${baseURL}/geocimat/clasificacion/visible`, formData, config)
+      .post('estadovisita/visible', formData)
       .then((response) => {
         resolve(response.data);
       })
@@ -52,4 +50,4 @@ function destroyClassification(formData) {
   });
 }
 
-export { index, storeClassification, updateClassification, destroyClassification };
+export { index, storeVisitingState, updateVisitingState, destroyVisitingState };

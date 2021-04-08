@@ -193,12 +193,12 @@
 
 <script>
 import MaterialColorPicker from '@/components/MaterialColorPicker'
-// import {
-//   index,
-//   storeClassification,
-//   updateClassification,
-//   destroyClassification
-// } from '@/lib/admin-classification'
+import {
+  index,
+  storeClassification,
+  updateClassification,
+  destroyClassification
+} from '@/lib/clasificacion'
 
 export default {
   name: 'Clasificacion',
@@ -236,6 +236,7 @@ export default {
       validEdit: true
     }
   },
+
   created () {
     this.getClassification()
   },
@@ -295,6 +296,7 @@ export default {
           })
       }
     },
+
     pushClassification (clasificacion) {
       this.listClassification.push({
         id: clasificacion.id,
@@ -306,7 +308,6 @@ export default {
 
     edit (index) {
       this.settingdata()
-
       this.nombre = this.listClassification[index].nombre
       this.formData.colorSelected = this.listClassification[
         index
@@ -318,7 +319,6 @@ export default {
 
     editClassification () {
       this.$refs.formEdit.validate()
-
       if (this.validate(this.nombre, this.formData.colorSelected)) {
         let updateData = {
           id: this.idClassification,
@@ -348,12 +348,14 @@ export default {
       this.snackbar.color = color
       this.snackbar.state = true
     },
+
     settingdata () {
       this.nombre = ''
       this.indexClassification = null
       this.idClassification = null
       this.formData.colorSelected = 'blue'
     },
+
     validate (nombre, color) {
       if (color === null && nombre.length == 0) {
         this.showSnackbar('Los campos de nombre y color estan vacios', 'red')

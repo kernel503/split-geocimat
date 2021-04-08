@@ -1,122 +1,125 @@
 <template>
   <v-app>
     <v-container>
-      <div>
-        <div v-show="showComponent">
-          <v-row class="my-5 mx-1">
-            <v-chip color="secondary" label text-color="white">
-              <h3>
-                {{ idProyecto }}
-              </h3>
-              <v-icon right> mdi-text-box-plus </v-icon>
-            </v-chip>
-          </v-row>
-          <v-toolbar elevation="0">
-            <v-tabs dark background-color="primary" grow v-model="tab">
-              <v-tab>Repositorio</v-tab>
-              <v-tab>Galería</v-tab>
-              <v-tab>Información</v-tab>
-            </v-tabs>
-          </v-toolbar>
+      <v-row class="mx-1 mt-1">
+        <v-chip class="mb-5" color="secondary" label text-color="white">
+          {{ idProyecto }}
+          <v-icon right> mdi-text-box-plus </v-icon>
+        </v-chip>
+      </v-row>
+      <v-toolbar elevation="0">
+        <v-tabs dark background-color="primary" grow v-model="tab">
+          <v-tab>Repositorio</v-tab>
+          <v-tab>Galería</v-tab>
+          <v-tab>Información</v-tab>
+        </v-tabs>
+      </v-toolbar>
 
-          <v-tabs-items v-model="tab" class="mt-2">
-            <v-tab-item>
-              <VistaArbol
-                v-bind:showAlert="showAlert"
-                v-bind:setGalery="setGalery"
-                v-bind:displayComponent="displayComponent"
-                v-bind:setProjectInfo="setProjectInfo"
-                v-bind:id="idProyecto"
-              />
-            </v-tab-item>
+      <v-tabs-items v-model="tab" class="mt-2">
+        <v-tab-item>
+          <VistaArbol
+            v-show="showComponent"
+            v-bind:showAlert="showAlert"
+            v-bind:setGalery="setGalery"
+            v-bind:displayComponent="displayComponent"
+            v-bind:setProjectInfo="setProjectInfo"
+            v-bind:id="idProyecto"
+          />
+        </v-tab-item>
 
-            <v-tab-item>
-              <v-card class="pa-2 mt-2" elevation="0">
-                <v-btn-toggle>
-                  <v-btn small @click="sizeCols--">
-                    <v-icon>mdi-minus</v-icon>
-                  </v-btn>
-                  <v-btn small @click="sizeCols++">
-                    <v-icon>mdi-plus</v-icon>
-                  </v-btn>
-                </v-btn-toggle>
-                <v-row class="mt-1">
-                  <v-col
-                    v-for="picture in galeryList"
-                    :key="picture.id"
-                    class="d-flex child-flex"
-                    :cols="sizeColsLimit"
-                  >
-                    <v-img
-                      :src="picture.url"
-                      :lazy-src="picture.url"
-                      aspect-ratio="1"
-                      class="grey lighten-2"
-                      alt="picture.name"
-                      @click="openImage(picture)"
-                      :style="{ cursor: 'pointer' }"
-                    >
-                      <template v-slot:placeholder>
-                        <v-row
-                          class="fill-height ma-0"
-                          align="center"
-                          justify="center"
-                        >
-                          <v-progress-circular
-                            indeterminate
-                            color="grey lighten-5"
-                          ></v-progress-circular>
-                        </v-row>
-                      </template>
-                    </v-img>
-                  </v-col>
-                </v-row>
-              </v-card>
-            </v-tab-item>
-
-            <v-tab-item>
-              <v-card class="mx-auto my-12" max-width="500">
-                <template slot="progress">
-                  <v-progress-linear
-                    color="deep-purple"
-                    height="10"
-                    indeterminate
-                  ></v-progress-linear>
-                </template>
+        <v-tab-item>
+          <v-card class="pa-2 mt-2" elevation="0">
+            <v-btn-toggle>
+              <v-btn small @click="sizeCols--">
+                <v-icon>mdi-minus</v-icon>
+              </v-btn>
+              <v-btn small @click="sizeCols++">
+                <v-icon>mdi-plus</v-icon>
+              </v-btn>
+            </v-btn-toggle>
+            <v-row class="mt-1">
+              <v-col
+                v-for="picture in galeryList"
+                :key="picture.id"
+                class="d-flex child-flex"
+                :cols="sizeColsLimit"
+              >
                 <v-img
-                  height="500"
-                  :src="projectInfo.url"
-                  :lazy-src="projectInfo.url"
+                  :src="picture.url"
+                  :lazy-src="picture.url"
                   aspect-ratio="1"
                   class="grey lighten-2"
                   alt="picture.name"
-                ></v-img>
-                <v-card-title> </v-card-title>
-                <v-card-text>
-                  <v-chip>{{ projectInfo.categoria }}</v-chip>
-                </v-card-text>
-                <v-divider class="mx-4"></v-divider>
-                <v-card-title>{{ projectInfo.descripcion }}</v-card-title>
-              </v-card>
-            </v-tab-item>
-          </v-tabs-items>
+                  @click="openImage(picture)"
+                  :style="{ cursor: 'pointer' }"
+                >
+                  <template v-slot:placeholder>
+                    <v-row
+                      class="fill-height ma-0"
+                      align="center"
+                      justify="center"
+                    >
+                      <v-progress-circular
+                        indeterminate
+                        color="grey lighten-5"
+                      ></v-progress-circular>
+                    </v-row>
+                  </template>
+                </v-img>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-tab-item>
 
-          <v-snackbar
-            v-model="snackbar.show"
-            :timeout="4000"
-            :color="snackbar.color"
-            left
-          >
-            {{ snackbar.text }}
-            <template v-slot:action="{ attrs }">
-              <v-btn text v-bind="attrs" @click="snackbar.show = false">
-                Cerrar
-              </v-btn>
+        <v-tab-item>
+          <v-card class="mx-auto my-12" max-width="500">
+            <template slot="progress">
+              <v-progress-linear
+                color="deep-purple"
+                height="10"
+                indeterminate
+              ></v-progress-linear>
             </template>
-          </v-snackbar>
-        </div>
-        <div v-show="!showComponent">Este proyecto no existe.</div>
-      </div>
+            <v-img
+              height="500"
+              :src="projectInfo.url"
+              :lazy-src="projectInfo.url"
+              aspect-ratio="1"
+              class="grey lighten-2"
+              alt="picture.name"
+            ></v-img>
+            <v-card-title> {{ projectInfo.nombre }}</v-card-title>
+            <v-card-text>
+              <div class="subtitle-1">
+                <v-chip outlined>
+                  {{ projectInfo.unidad }}
+                </v-chip>
+              </div>
+              <div class="subtitle-1 mt-2">
+                <v-chip color="indigo darken-3" outlined>
+                  Unidad: {{ projectInfo.categoria }}
+                </v-chip>
+              </div>
+              <v-divider class="mx-4"></v-divider>
+              {{ projectInfo.descripcion }}
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+      </v-tabs-items>
+
+      <v-snackbar
+        v-model="snackbar.show"
+        :timeout="4000"
+        :color="snackbar.color"
+        left
+      >
+        {{ snackbar.text }}
+        <template v-slot:action="{ attrs }">
+          <v-btn text v-bind="attrs" @click="snackbar.show = false">
+            Cerrar
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-container>
   </v-app>
 </template>
@@ -147,10 +150,12 @@ export default {
       galeryList: [],
 
       projectInfo: {
-        url:
-          'https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/static/-89.229461,14.187164,13.58,0/500x500?access_token=pk.eyJ1Ijoia2VybmVsNTAzIiwiYSI6ImNrZHA5cmhiYTIwamgyeXBkOTgyZmU1cmkifQ.bK_Wbz4134Uf33qBDGklKg',
+        nombre: '',
+        categoria: '',
+        unidad: '',
         descripcion: '',
-        categoria: ''
+        url:
+          'https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/static/-89.229461,14.187164,13.58,0/500x500?access_token=pk.eyJ1Ijoia2VybmVsNTAzIiwiYSI6ImNrZHA5cmhiYTIwamgyeXBkOTgyZmU1cmkifQ.bK_Wbz4134Uf33qBDGklKg'
       }
     }
   },
@@ -187,13 +192,21 @@ export default {
       this.galeryList = list
     },
 
-    setProjectInfo ({ descripcion, categoria, longitud, latitud }) {
-      const info = {
-        descripcion,
+    setProjectInfo ({
+      nombre,
+      categoria,
+      unidad,
+      descripcion,
+      longitud,
+      latitud
+    }) {
+      this.projectInfo = {
+        nombre,
         categoria,
+        unidad,
+        descripcion,
         url: `https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/static/${longitud},${latitud},13.58,0/500x500?access_token=pk.eyJ1Ijoia2VybmVsNTAzIiwiYSI6ImNrZHA5cmhiYTIwamgyeXBkOTgyZmU1cmkifQ.bK_Wbz4134Uf33qBDGklKg`
       }
-      this.projectInfo = info
     },
 
     openImage ({ url }) {
