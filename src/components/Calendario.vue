@@ -29,6 +29,8 @@
               :key="statuses.id"
               :color="statuses.material_color"
               @click="idStatusFiltered = statuses.id"
+              outlined
+
               dark
             >
               {{ statuses.nombre }}
