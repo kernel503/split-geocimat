@@ -245,12 +245,12 @@
 </template>
 
 <script>
-// import {
-//   getCalendar,
-//   createDate,
-//   editDate,
-//   deleteDate
-// } from '@/lib/project-calendar'
+import {
+  getCalendar,
+  createDate,
+  editDate,
+  deleteDate
+} from '@/lib/project-calendar'
 
 export default {
   name: 'Calendario',

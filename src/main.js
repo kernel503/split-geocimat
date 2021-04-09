@@ -8,7 +8,7 @@ import Calendario from './components/Calendario.vue';
 import EstadoVisita from './components/EstadoVisita.vue';
 import Clasificacion from './components/Clasificacion.vue';
 
-window.axios = require('axios');
+window.axios = axios;
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.common['X-CSRF-TOKEN'] =
   document.querySelector('input[name="_token"]')?.value || 'INVALID_CSRF_TOKEN';
