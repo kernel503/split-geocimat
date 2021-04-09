@@ -162,7 +162,7 @@
           <v-card>
             <v-form
               @submit.prevent="editVisit"
-              ref="formedit"
+              ref="formEdit"
               v-model="validEdit"
             >
               <v-card-title> {{ visitInfo.project }} </v-card-title>
