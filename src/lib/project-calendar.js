@@ -1,9 +1,8 @@
-import { baseURL, axios, config } from './base';
 
 function getCalendar() {
   return new Promise((resolve, reject) => {
     axios
-      .get(`${baseURL}/geocimat/calendario`)
+      .get('/calendario')
       .then((response) => {
         resolve(response.data);
       })
@@ -16,7 +15,7 @@ function getCalendar() {
 function createDate(formData) {
   return new Promise((resolve, reject) => {
     axios
-      .post(`${baseURL}/geocimat/calendario/crear`, formData, config)
+      .post("/calendario/crear", formData)
       .then((response) => {
         resolve(response.data);
       })
@@ -29,7 +28,7 @@ function createDate(formData) {
 function editDate(formData) {
   return new Promise((resolve, reject) => {
     axios
-      .post(`${baseURL}/geocimat/calendario/modificar`, formData, config)
+      .post('calendario/modificar', formData)
       .then((response) => {
         resolve(response.data);
       })
@@ -42,7 +41,7 @@ function editDate(formData) {
 function deleteDate(formData) {
   return new Promise((resolve, reject) => {
     axios
-      .post(`${baseURL}/geocimat/calendario/destruir`, formData, config)
+      .post('calendario/destruir', formData)
       .then((response) => {
         resolve(response.data);
       })

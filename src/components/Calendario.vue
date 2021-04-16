@@ -29,6 +29,8 @@
               :key="statuses.id"
               :color="statuses.material_color"
               @click="idStatusFiltered = statuses.id"
+              outlined
+
               dark
             >
               {{ statuses.nombre }}
@@ -162,7 +164,7 @@
           <v-card>
             <v-form
               @submit.prevent="editVisit"
-              ref="formedit"
+              ref="formEdit"
               v-model="validEdit"
             >
               <v-card-title> {{ visitInfo.project }} </v-card-title>
@@ -245,12 +247,12 @@
 </template>
 
 <script>
-// import {
-//   getCalendar,
-//   createDate,
-//   editDate,
-//   deleteDate
-// } from '@/lib/project-calendar'
+import {
+  getCalendar,
+  createDate,
+  editDate,
+  deleteDate
+} from '@/lib/project-calendar'
 
 export default {
   name: 'Calendario',
