@@ -8,7 +8,10 @@ module.exports = {
     optimization: {
       splitChunks: false,
     },
+    output: {
+      filename: './geocimat/app.js',
+    },
   },
-  outputDir: 'docs',
+  outputDir: 'geocimat',
   filenameHashing: false,
 };
